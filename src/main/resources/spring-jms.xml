@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xmlns:jee="http://www.springframework.org/schema/jee"
+			 xmlns:p="http://www.springframework.org/schema/p"
+			 xmlns:jms="http://www.springframework.org/schema/jms"
+			 xsi:schemaLocation="http://www.springframework.org/schema/beans
+							http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://www.springframework.org/schema/jee
+						  http://www.springframework.org/schema/jee/spring-jee.xsd
+						  http://www.springframework.org/schema/jms
+						  http://www.springframework.org/schema/jms/spring-jms.xsd">
+
+	<jee:jndi-lookup id="connectionFactory" jndi-name="/ConnectionFactory"/>
+	<jee:jndi-lookup id="trackingQueue" jndi-name="queue/DiscountTrackingQueue"/>
+
+	<bean id="discountDetailReceiver" class="it.dl.engine.app.DiscountDetailReceiver" />
+
+
+	<jms:listener-container connection-factory="connectionFactory" concurrency="1">
+		<jms:listener destination="DiscountTrackingQueue" ref="discountDetailReceiver" method="receiveMessage"/>
+	</jms:listener-container>
+
+
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate"
+				p:connectionFactory-ref="connectionFactory"
+				p:defaultDestinationName="DiscountTrackingQueue"
+	/>
+
+</beans>
