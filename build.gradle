@@ -23,10 +23,7 @@ sourceCompatibility = 1.6
 targetCompatibility = 1.6
 
 repositories {
-  maven {
-    name "nexus"
-    url "http://vbbolly.directline.italy:8080/nexus-2.2-01/content/groups/public"
-  }
+  mavenCentral()
 }
 
 configurations {
@@ -46,12 +43,10 @@ dependencies {
   compile("org.springframework:spring-jms:${springVersion}")
   compile("com.fasterxml.jackson.core:jackson-databind:2.6.3")
   compile("commons-dbcp:commons-dbcp:1.4")
-  //runtime("org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.0.0.Final")
   provided("org.hsqldb:hsqldb:2.3.3")
   provided("org.apache.openejb:javaee-api:6.0-4")
   provided("org.jboss.ejb3:jboss-ejb3-ext-api:1.0.0")
   provided("geronimo-spec:geronimo-spec-jta:1.0.1B-rc4")
-//  provided("org.hibernate:ejb3-persistence:1.0.2.GA")
   compile("org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final") {
     exclude group: "org.slf4j"
   }
@@ -68,33 +63,8 @@ dependencies {
 
 }
 
-
-eclipse {
-  classpath {
-    containers.remove("org.eclipse.jdt.launching.JRE_CONTAINER")
-    containers "org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"
-  }
-}
-
 // Execute the wrapper task to download the wrapper jar
 task wrapper(type: Wrapper) {
   gradleVersion = "2.3"
 }
 // To run this task you must unset M2_HOME user variable
-uploadArchives {
-  repositories {
-    mavenDeployer {
-      repository(id: "releases", url: "http://vbbolly.directline.italy:8080/nexus-2.2-01/content/repositories/releases") {
-        authentication(userName: "deployment", password: "deployment123")
-      }
-      snapshotRepository(id: "snapshots", url: "http://vbbolly.directline.italy:8080/nexus-2.2-01/content/repositories/snapshots") {
-        authentication(userName: "deployment", password: "deployment123")
-      }
-      pom.project {
-        version "${project.version}"
-        artifactId "$appName"
-        groupId "${project.group}"
-      }
-    }
-  }
-}
