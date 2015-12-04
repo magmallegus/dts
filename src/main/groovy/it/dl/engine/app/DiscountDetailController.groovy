@@ -24,7 +24,7 @@ class DiscountDetailController {
   }
 
   @RequestMapping(value = "/save", method=RequestMethod.POST)
-  void addToQueue(@RequestBody DiscountOutput discountOutput) {
+  String addToQueue(@RequestBody DiscountOutput discountOutput) {
     JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class)
     println("Sending a new message.");
 
@@ -41,6 +41,7 @@ class DiscountDetailController {
       println("discountDetail ======> $discountDetail")
       jmsTemplate.convertAndSend(discountDetail)
     }
+    "jsonTemplate"
   }
 
   private DiscountDetail evalDiscountDetail(Coverage coverage, DiscountOutput discountOutput) {

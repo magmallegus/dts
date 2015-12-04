@@ -15,7 +15,7 @@
 	<mvc:annotation-driven/>
 
 	<!-- view resolver for rendering the final output -->
-	<bean id="viewResolver"
-				class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-				p:prefix="/pages/" p:suffix=".jsp"/>
+	<!-- view resolver for rendering the final output -->
+	<bean name="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+  <bean name="jsonTemplate" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
 </beans>
